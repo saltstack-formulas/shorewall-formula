@@ -1,0 +1,12 @@
+{% set shorewall = salt['grains.filter_by']({
+    'Debian': {
+        'pkg': 'shorewall',
+    },
+    'RedHat': {
+        'pkg': 'shorewall',
+    },
+    'Arch': {
+        'pkg': 'screen',
+    },
+}, merge=salt['pillar.get']('shorewall:lookup')) %}
+
