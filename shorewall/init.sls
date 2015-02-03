@@ -9,3 +9,11 @@ shorewall:
     - require:
       - pkg: shorewall
 
+/usr/share/shorewall/macro.SaltMaster:
+  file.managed:
+    - source: salt://shorewall/files/macro.SaltMaster
+    - require:
+      - pkg: shorewall
+    - watch_in:
+      - service: shorewall
+
