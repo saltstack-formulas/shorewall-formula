@@ -14,6 +14,7 @@
 ###############################################################################
 #ZONE   TYPE    OPTIONS                 IN                      OUT
 #                                       OPTIONS                 OPTIONS
+fw      firewall
 {%- for zone, zone_data in salt['pillar.get']('shorewall:zones', {}).iteritems() %}
 
 # {{ zone }}
