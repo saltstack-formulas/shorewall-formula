@@ -1,9 +1,9 @@
-{% from "shorewall/map.jinja" import shorewall with context %}
+{% from "shorewall/map.jinja" import map with context %}
 
 shorewall:
   pkg:
     - installed
-    - name: {{ shorewall.pkg }}
+    - name: {{ map.pkg }}
   service.running:
     - enable: True
     - require:
