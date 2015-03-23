@@ -1,0 +1,15 @@
+shorewall:
+  zones:
+    mgmt:
+      type: ipv4
+      options:
+      in_options:
+      out_options:
+      comment:
+      interfaces:
+        eth0:
+          broadcast: detect
+          options: tcpflags,logmartians,nosmurfs
+          comment:
+            
+        

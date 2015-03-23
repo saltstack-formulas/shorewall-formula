@@ -1,3 +1,4 @@
+# !!! FILE MANAGED BY SALT !!!
 #
 # Shorewall version 4.0 - Sample Interfaces File for one-interface configuration.
 # Copyright (C) 2006 by the Shorewall Team
@@ -13,5 +14,14 @@
 ###############################################################################
 FORMAT 2
 ###############################################################################
-#ZONE	INTERFACE	OPTIONS
-net     eth0            dhcp,tcpflags,logmartians,nosmurfs,sourceroute=0
+#ZONE   INTERFACE       OPTIONS
+
+{%- for zone, zone_data in salt['pillar.get']('shorewall:zones', {}).iteritems() %}
+{%-   for interface, interface_data in zone_data.get('interfaces', {}).iteritems() %}
+
+# {{ interface }}
+# {{ interface_data.comment }}
+{{ zone }}  {{ interface }}  {{ interface_data.get('options', '') }}
+
+{%-   endfor %}
+{%- endfor %}
