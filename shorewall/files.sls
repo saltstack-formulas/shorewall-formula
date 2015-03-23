@@ -1,6 +1,4 @@
-include:
-  - shorewall
-
+# Shorewall zones
 /etc/shorewall/zones:
   file.managed:
     - source: salt://shorewall/files/one-interface/zones
@@ -12,6 +10,7 @@ include:
     - watch_in:
       - service: shorewall
     
+# Shorewall interfaces
 /etc/shorewall/interfaces:
   file.managed:
     - source: salt://shorewall/files/one-interface/interfaces
@@ -23,6 +22,7 @@ include:
     - watch_in:
       - service: shorewall
     
+# Shorewall policy
 /etc/shorewall/policy:
   file.managed:
     - source: salt://shorewall/files/one-interface/policy
@@ -34,6 +34,7 @@ include:
     - watch_in:
       - service: shorewall
     
+# Shorewall rules
 /etc/shorewall/rules:
   file.managed:
     - source: salt://shorewall/files/one-interface/rules
