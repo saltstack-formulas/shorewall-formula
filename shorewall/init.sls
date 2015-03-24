@@ -77,3 +77,15 @@ shorewall:
     - watch_in:
       - service: shorewall
 
+{{ map.config_path }}/routestopped:
+  file.managed:
+    - source: salt://shorewall/files/routestopped.jinja
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 0644
+    - require:
+      - pkg: shorewall
+    - watch_in:
+      - service: shorewall
+
