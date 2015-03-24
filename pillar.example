@@ -11,5 +11,35 @@ shorewall:
           broadcast: detect
           options: tcpflags,logmartians,nosmurfs
           comment:
-            
         
+  policy:
+    - source: $FW
+      dest: net
+      policy: ACCEPT
+      comment: Allow Firewall to connect to world
+    - source: net
+      dest: all
+      policy: DROP
+      loglevel: info
+    - source: all
+      dest: all
+      policy: REJECT
+      loglevel: info
+      burstlimit: 10/sec:40
+      connlimit: 40/255.255.255.0
+      comment: Reject all other connections
+
+  rules:
+    - action: SSH(ACCEPT)
+      source: all
+      dest: all
+      comment: Allow SSH connections
+    - action: Ping(ACCEPT)
+      source: all
+      dest: $FW
+      comment: Allow Pings
+    - action: SaltMaster(ACCEPT)
+      source: all
+      dest: $FW
+      comment: Allow connections to saltmaster
+

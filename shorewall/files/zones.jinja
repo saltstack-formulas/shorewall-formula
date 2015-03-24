@@ -20,5 +20,4 @@ fw      firewall
 # {{ zone }}
 # {{ zone_data.comment }}
 {{ zone }}    {{ zone_data.get('type', 'ipv4') }}    {{ zone_data.get('options', '-') }}    {{ zone_data.get('in_options', '-') }}    {{ zone_data.get('out_options', '-') }}
-
 {%- endfor %}
