@@ -65,3 +65,15 @@ shorewall:
     - watch_in:
       - service: shorewall
 
+{{ map.config_path }}/masq:
+  file.managed:
+    - source: salt://shorewall/files/masq.jinja
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 0644
+    - require:
+      - pkg: shorewall
+    - watch_in:
+      - service: shorewall
+
