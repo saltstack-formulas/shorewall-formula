@@ -13,8 +13,12 @@
 # For information about entries in this file, type "man shorewall-masq"
 ###############################################################################
 #INTERFACE              SOURCE          ADDRESS         PROTO   PORT(S) IPSEC   MARK
-{%- for masq in salt['pillar.get']('shorewall:masq', {}) %}
 
+{%- for masq in salt['pillar.get']('shorewall:masq', {}) %}
+{%- if masq is string %}
+{{ masq }}
+{%- else %}
 # {{ masq.get('comment', '') }}
 {{ masq.get('interface') }}  {{ masq.get('source', '-') }}  {{ masq.get('address', '-') }}  {{ masq.get('proto', '-') }}  {{ masq.get('ports', '-') }}  {{ masq.get('ipsec', '-') }}  {{ masq.get('mark', '-') }}
+{%- endif %}
 {%- endfor %}

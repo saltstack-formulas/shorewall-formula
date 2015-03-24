@@ -18,8 +18,12 @@
 #SECTION ESTABLISHED
 #SECTION RELATED
 SECTION NEW
-{%- for rules in salt['pillar.get']('shorewall:rules', {}) %}
 
-# {{ rules.get('comment', '') }}
-{{ rules.get('action') }}  {{ rules.get('source') }}  {{ rules.get('dest') }}  {{ rules.get('proto', '-') }}  {{ rules.get('destport', '-') }}  {{ rules.get('sourceport', '-') }}  {{ rules.get('originaldest', '-') }}  {{ rules.get('ratelimit', '-') }}  {{ rules.get('usergroup', '-') }}  {{ rules.get('mark', '-') }}  {{ rules.get('connlimit', '-') }}  {{ rules.get('time', '-') }}  {{ rules.get('headers', '-') }}  {{ rules.get('switch', '') }}
+{%- for rule in salt['pillar.get']('shorewall:rules', {}) %}
+{%- if rule is string %}
+{{ rule }}
+{%- else %}
+# {{ rule.get('comment', '') }}
+{{ rule.get('action') }}  {{ rule.get('source') }}  {{ rule.get('dest') }}  {{ rule.get('proto', '-') }}  {{ rule.get('destport', '-') }}  {{ rule.get('sourceport', '-') }}  {{ rule.get('originaldest', '-') }}  {{ rule.get('ratelimit', '-') }}  {{ rule.get('usergroup', '-') }}  {{ rule.get('mark', '-') }}  {{ rule.get('connlimit', '-') }}  {{ rule.get('time', '-') }}  {{ rule.get('headers', '-') }}  {{ rule.get('switch', '') }}
+{%- endif %}
 {%- endfor %}
