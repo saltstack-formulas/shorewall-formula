@@ -20,7 +20,7 @@ FORMAT 2
 {%-   for interface, interface_data in zone_data.get('interfaces', {}).iteritems() %}
 
 # {{ interface }}
-# {{ interface_data.comment }}
+# {{ interface_data.comment if interface_data.comment is defined else '' }}
 {{ zone }}  {{ interface }}  {{ interface_data.get('options', '') }}
 {%-   endfor %}
 {%- endfor %}
