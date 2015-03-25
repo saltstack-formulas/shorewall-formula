@@ -94,3 +94,13 @@ shorewall:
       - service: shorewall
 {% endfor %}
 
+# enable shorewall
+/etc/default/shorewall:
+  file.replace:
+    - pattern: "startup=0"
+    - repl: "startup=1"
+    - require:
+      - pkg: shorewall
+    - watch_in:
+      - service: shorewall
+
