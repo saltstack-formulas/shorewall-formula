@@ -1,4 +1,7 @@
 shorewall:
+  macros:
+    - macro.SaltMaster
+
   zones:
     mgmt:
       type: ipv4

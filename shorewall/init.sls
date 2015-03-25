@@ -89,3 +89,16 @@ shorewall:
     - watch_in:
       - service: shorewall
 
+{% for macro in salt['pillar.get']('shorewall:macros', {}) %}
+/usr/share/shorewall/{{ macro }}:
+  file.managed:
+    - source: salt://shorewall/files/{{ macro }}
+    - user: root
+    - group: root
+    - mode: 0644
+    - require:
+      - pkg: shorewall
+    - watch_in:
+      - service: shorewall
+{% endfor %}
+
