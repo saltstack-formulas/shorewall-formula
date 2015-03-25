@@ -9,14 +9,6 @@ shorewall:
     - require:
       - pkg: shorewall
 
-{{ map.macro_path }}/macro.SaltMaster:
-  file.managed:
-    - source: salt://shorewall/files/macro.SaltMaster
-    - require:
-      - pkg: shorewall
-    - watch_in:
-      - service: shorewall
-
 {{ map.config_path }}/zones:
   file.managed:
     - source: salt://shorewall/files/zones.jinja
