@@ -22,6 +22,7 @@ shorewall_v{{ v }}:
 
 {# Create config files #}
 {%-    for config in map.config_files %}
+{# NAT is not possible for IPv6, see http://shorewall.net/IPv6Support.html #}
 {%-      if config == 'masq' and v == 6 %}{% continue %}{% endif %}
 
 shorewall_v{{ v }}_config_{{ config }}:
