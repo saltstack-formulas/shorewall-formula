@@ -51,3 +51,6 @@ shorewall:
       comment: Allow connections to saltmaster
       # No ipv is given here          # Rule for ipv4 and ipv6 
 
+  params:
+    - key: "NET_BCAST"
+      value: "130.252.100.255"
