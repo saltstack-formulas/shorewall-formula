@@ -18,6 +18,11 @@ Available states
 
 Basically installation of shorewall. Will be extended using explicit pillar config.
 
+``shorewall.upnp``
+==================
+
+Add upnp support. See http://shorewall.net/UPnP.html.
+
 ``Pillar``
 ==========
 
