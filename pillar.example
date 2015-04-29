@@ -2,6 +2,7 @@ shorewall:
   ipv: # omit means 4 only. This controls wether shorewall or shorewall and shorewall6 is installed.
     - 4 # ipv4 support
     - 6 # ipv6 support. Cant' be used without ipv4!
+
   zones:
     mgmt:
       ipv: 4                        # This controls if this item is used for ipv4 and/or ipv6 shorewall. Omit for both.
@@ -50,6 +51,17 @@ shorewall:
       dest: $FW
       comment: Allow connections to saltmaster
       # No ipv is given here          # Rule for ipv4 and ipv6 
+
+  masq:
+    - interface: eth0
+      source:   '10.100.200.45/29'
+      address: '2.2.3.3'
+      ipv: 4
+
+  routestopped:
+    - interface: eth0
+      host: '25.6.7.8'
+      ipv: 4
 
   params:
     - key: "NET_BCAST"
