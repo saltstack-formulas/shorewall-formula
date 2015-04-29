@@ -1,10 +1,10 @@
 shorewall:
-  ipv: # omit means 4 only
+  ipv: # omit means 4 only. This controls wether shorewall or shorewall and shorewall6 is installed.
     - 4 # ipv4 support
     - 6 # ipv6 support. Cant' be used without ipv4!
   zones:
     mgmt:
-      ipv: 4
+      ipv: 4                        # This controls if this item is used for ipv4 and/or ipv6 shorewall. Omit for both.
       type: ipv4
       options:
       in_options:
