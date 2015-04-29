@@ -25,3 +25,8 @@ Basically installation of shorewall. Will be extended using explicit pillar conf
 * Each config item (zone, interface, rule, etc.) is configured for all configured ip versions (ipv4, ipv6) by default. If it is needed for one specific version this can be set in pillar with flag 'ipv': 'ipv: 4' or 'ipv: 6'.
 
 See shorewall/pillar.example
+
+``Notes``
+=========
+
+* NAT is not possible with IPv6, see http://shorewall.net/IPv6Support.html
