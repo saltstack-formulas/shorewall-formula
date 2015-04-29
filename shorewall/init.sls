@@ -1,91 +1,53 @@
 {% from "shorewall/map.jinja" import map with context %}
 
-shorewall:
+{%- set ipv = salt['pillar.get']('shorewall:ipv', [4]) %}
+{%- do ipv.append(4) if not 4 in ipv %}
+
+{# Iterate over all given ip versions in pillar #}
+{%- for v in ipv %}
+
+{%- set pkg = map['pkg_v{0}'.format(v)] %}
+{%- set name = 'shorewall_v{0}'.format(v) %}
+{%- set config_path = map['config_path_v{0}'.format(v)] %}
+{%- set service = map['service_v{0}'.format(v)] %}
+
+{# Install required packages #}
+shorewall_v{{ v }}:
   pkg:
     - installed
-    - name: {{ map.pkg }}
+    - name: {{ pkg }}
   service.running:
+    - name: {{ service }}
     - enable: True
-    - require:
-      - pkg: shorewall
 
-{{ map.macro_path }}/macro.SaltMaster:
+{# Create config files #}
+{%-    for config in map.config_files %}
+
+shorewall_v{{ v }}_config_{{ config }}:
   file.managed:
+    - name: "{{ config_path }}/{{ config }}"
+    - source: salt://shorewall/files/{{ config }}.jinja
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 0644
+    - require:
+      - pkg: {{ name }}
+    - watch_in:
+      - service: {{ name }}
+    - context:
+      ipv: {{ v }}
+
+{%-   endfor %}
+{%- endfor %}
+
+{# Install macro files #}
+shorewall_config_macro:
+  file.managed:
+    - name: "{{ map.macro_path }}/macro.SaltMaster"
     - source: salt://shorewall/files/macro.SaltMaster
     - require:
-      - pkg: shorewall
+      - pkg: shorewall_v6
     - watch_in:
-      - service: shorewall
-
-{{ map.config_path }}/zones:
-  file.managed:
-    - source: salt://shorewall/files/zones.jinja
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 0644
-    - require:
-      - pkg: shorewall
-    - watch_in:
-      - service: shorewall
-
-{{ map.config_path }}/interfaces:
-  file.managed:
-    - source: salt://shorewall/files/interfaces.jinja
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 0644
-    - require:
-      - pkg: shorewall
-    - watch_in:
-      - service: shorewall
-
-{{ map.config_path }}/policy:
-  file.managed:
-    - source: salt://shorewall/files/policy.jinja
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 0644
-    - require:
-      - pkg: shorewall
-    - watch_in:
-      - service: shorewall
-
-{{ map.config_path }}/rules:
-  file.managed:
-    - source: salt://shorewall/files/rules.jinja
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 0644
-    - require:
-      - pkg: shorewall
-    - watch_in:
-      - service: shorewall
-
-{{ map.config_path }}/masq:
-  file.managed:
-    - source: salt://shorewall/files/masq.jinja
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 0644
-    - require:
-      - pkg: shorewall
-    - watch_in:
-      - service: shorewall
-
-{{ map.config_path }}/routestopped:
-  file.managed:
-    - source: salt://shorewall/files/routestopped.jinja
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 0644
-    - require:
-      - pkg: shorewall
-    - watch_in:
-      - service: shorewall
+      - service: shorewall_v6
 

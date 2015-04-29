@@ -1,6 +1,10 @@
 shorewall:
+  ipv: # omit means 4 only
+    - 4 # ipv4 support
+    - 6 # ipv6 support. Cant' be used without ipv4!
   zones:
     mgmt:
+      ipv: 4
       type: ipv4
       options:
       in_options:
@@ -8,6 +12,7 @@ shorewall:
       comment:
       interfaces:
         eth0:
+          ipv: 4
           broadcast: detect
           options: tcpflags,logmartians,nosmurfs
           comment:
@@ -34,12 +39,15 @@ shorewall:
       source: all
       dest: all
       comment: Allow SSH connections
+      ipv: 4                          # Rule for ipv4
     - action: Ping(ACCEPT)
       source: all
       dest: $FW
       comment: Allow Pings
+      ipv: 6                          # Rule for ipv6
     - action: SaltMaster(ACCEPT)
       source: all
       dest: $FW
       comment: Allow connections to saltmaster
+      # No ipv is given here          # Rule for ipv4 and ipv6 
 

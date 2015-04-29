@@ -1,8 +1,13 @@
 {% set map = salt['grains.filter_by']({
   'Debian': {
-    'pkg': 'shorewall',
-    'config_path': '/etc/shorewall/',
-    'macro_path': '/usr/share/shorewall/',
+    'pkg_v4': 'shorewall',
+    'pkg_v6': 'shorewall6',
+    'config_path_v4': '/etc/shorewall',
+    'config_path_v6': '/etc/shorewall6',
+    'service_v4': 'shorewall',
+    'service_v6': 'shorewall6',
+    'macro_path': '/usr/share/shorewall',
+    'config_files': ['zones', 'interfaces', 'policy', 'rules', 'masq', 'routestopped'] 
   },
   'RedHat': {
     'pkg': 'shorewall',
