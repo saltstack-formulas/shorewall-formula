@@ -66,3 +66,12 @@ shorewall:
   params:
     - key: "NET_BCAST"
       value: "130.252.100.255"
+
+  etcdefault:
+    startup: 1
+    wait_interface: False
+    options: ''
+    startoptions: ''
+    restartoptions: ''
+    initlog: '/dev/null'
+    safestop: 0
