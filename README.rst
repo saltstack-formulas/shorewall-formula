@@ -35,3 +35,4 @@ See shorewall/pillar.example
 =========
 
 * NAT is not possible with IPv6, see http://shorewall.net/IPv6Support.html
+* For traffic shaping either use simple (tcinterfaces and tcpri) or complex (tcdevices, tcclasses and tcrules)

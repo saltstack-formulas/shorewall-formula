@@ -1,0 +1,11 @@
+# !!! FILE MANAGED BY SALT !!!
+
+#INTERFACE          IN-BANDWIDTH        OUT-BANDWIDTH
+
+{%- for rule in salt['pillar.get']('shorewall:tcdevices', {}) %}
+{#- skip if ip version does not match #}
+{%-   if rule.ipv is defined and rule.ipv != ipv %}{% continue %}{% endif %}
+
+{{ rule.get('name') }}     {{ rule.get('in_bandwidth', '-') }}     {{ rule.get('out_bandwidth', '-') }} 
+
+{%- endfor %}
