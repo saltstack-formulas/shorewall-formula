@@ -16,8 +16,10 @@
 #                                       OPTIONS                 OPTIONS
 fw      firewall
 {%- for zone, zone_data in salt['pillar.get']('shorewall:zones', {}).iteritems() %}
+{# skip if ip version does not match #}
+{%-   if zone_data.ipv is defined and zone_data.ipv != ipv %}{% continue %}{%endif %}
 
 # {{ zone }}
 # {{ zone_data.comment if zone_data.comment is defined else ''}}
-{{ zone }}    {{ zone_data.get('type', 'ipv4') }}    {{ zone_data.get('options', '-') }}    {{ zone_data.get('in_options', '-') }}    {{ zone_data.get('out_options', '-') }}
+{{ zone }}    {{ zone_data.get('type', 'ipv{0}'.format(ipv)) }}    {{ zone_data.get('options', '-') }}    {{ zone_data.get('in_options', '-') }}    {{ zone_data.get('out_options', '-') }}
 {%- endfor %}

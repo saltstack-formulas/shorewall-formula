@@ -23,3 +23,21 @@ Available states
 
 Installation and configuration of shorewall distribution package. 
 
+``shorewall.upnp``
+==================
+
+Add upnp support. See http://shorewall.net/UPnP.html.
+
+``Pillar``
+==========
+
+* Default is to install and configure shorewall for ipv4. If ipv6 is needed it must be configured in pillar.
+* Each config item (zone, interface, rule, etc.) is configured for all configured ip versions (ipv4, ipv6) by default. If it is needed for one specific version this can be set in pillar with flag 'ipv': 'ipv: 4' or 'ipv: 6'.
+
+See shorewall/pillar.example
+
+``Notes``
+=========
+
+* NAT is not possible with IPv6, see http://shorewall.net/IPv6Support.html
+* For traffic shaping either use simple (tcinterfaces and tcpri) or complex (tcdevices, tcclasses and tcrules)

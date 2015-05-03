@@ -1,0 +1,12 @@
+# !!! FILE MANAGED BY SALT !!!
+
+#ACTION  SOURCE         DESTINATION     PROTOCOL   PORT(S)       SOURCE PORT(S)   USER     TEST      LENGTH    TOS   CONNBYTES      HELPER     PROBABILITY     DSCP     STATE
+
+{%- for rule in salt['pillar.get']('shorewall:tcrules', {}) %}
+{#- skip if ip version does not match #}
+{%-   if rule.ipv is defined and rule.ipv != ipv %}{% continue %}{% endif %}
+
+{{ rule.get('action') }}     {{ rule.get('source', '0.0.0.0/0') }}     {{ rule.get('dest', '0.0.0.0/0') }}     {{ rule.get('proto', '-') }}      {{ rule.get('port', '-') }}     {{ rule.get('sourceport', '-') }}     {{ rule.get('user', '-') }}     {{ rule.get('test', '-') }}     {{ rule.get('length', '-') }}     {{ rule.get('tos', '-') }}     {{ rule.get('connbytes', '-') }}     {{ rule.get('helper', '-') }}     {{ rule.get('probability', '-') }}     {{ rule.get('dscp', '-') }}     {{ rule.get('state', '') }}
+
+{%- endfor %}
+

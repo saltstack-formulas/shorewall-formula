@@ -1,0 +1,11 @@
+# !!! FILE MANAGED BY SALT !!!
+
+#BAND         PROTO         PORT(S)         ADDRESS             INTERFACE        HELPER
+
+{%- for rule in salt['pillar.get']('shorewall:tcpri', {}) %}
+{#- skip if ip version does not match #}
+{%-   if rule.ipv is defined and rule.ipv != ipv %}{% continue %}{% endif %}
+
+{{ rule.get('band') }}     {{ rule.get('proto', '-') }}     {{ rule.get('port', '-') }}     {{ rule.get('address', '-') }}     {{ rule.get('interface', '-') }}     {{ rule.get('helper', '-') }}
+
+{%- endfor %}

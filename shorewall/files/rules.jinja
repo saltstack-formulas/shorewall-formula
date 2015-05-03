@@ -20,10 +20,13 @@
 SECTION NEW
 
 {%- for rule in salt['pillar.get']('shorewall:rules', {}) %}
-{%- if rule is string %}
+{# skip if ip version does not match #}
+{%-   if rule.ipv is defined and rule.ipv != ipv %}{% continue %}{% endif %}
+
+{%-   if rule is string %}
 {{ rule }}
-{%- else %}
+{%-   else %}
 # {{ rule.get('comment', '') }}
-{{ rule.get('action') }}  {{ rule.get('source', 'none') }}  {{ rule.get('dest'. 'none') }}  {{ rule.get('proto', '-') }}  {{ rule.get('destport', '-') }}  {{ rule.get('sourceport', '-') }}  {{ rule.get('originaldest', '-') }}  {{ rule.get('ratelimit', '-') }}  {{ rule.get('usergroup', '-') }}  {{ rule.get('mark', '-') }}  {{ rule.get('connlimit', '-') }}  {{ rule.get('time', '-') }}  {{ rule.get('headers', '-') }}  {{ rule.get('switch', '') }}
+{{ rule.get('action') }}  {{ rule.get('source', 'none') }}  {{ rule.get('dest', 'none') }}  {{ rule.get('proto', '-') }}  {{ rule.get('destport', '-') }}  {{ rule.get('sourceport', '-') }}  {{ rule.get('originaldest', '-') }}  {{ rule.get('ratelimit', '-') }}  {{ rule.get('usergroup', '-') }}  {{ rule.get('mark', '-') }}  {{ rule.get('connlimit', '-') }}  {{ rule.get('time', '-') }}  {{ rule.get('headers', '-') }}  {{ rule.get('switch', '') }}
 {%- endif %}
 {%- endfor %}
