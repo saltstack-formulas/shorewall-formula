@@ -124,10 +124,10 @@ shorewall:
     - action: "4:T"
       proto: tcp
     - action: "5:T"
-      source: 10.1.1.220
+      source: 192.168.1.5
       ipv: 4
     - action: "5:T"
-      source: fd66:feed:beef:6666::220
+      source: fd42:1:1:1::220
       ipv: 6
     - action: "2:T"
       proto: icmp
