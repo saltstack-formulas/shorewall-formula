@@ -1,0 +1,30 @@
+# !!! FILE MANAGED BY SALT !!!
+#
+# Shorewall version 4.0 - Sample Interfaces File for one-interface configuration.
+# Copyright (C) 2006 by the Shorewall Team
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# See the file README.txt for further details.
+#------------------------------------------------------------------------------
+# For information about entries in this file, type "man shorewall-interfaces"
+###############################################################################
+FORMAT 2
+###############################################################################
+#ZONE   INTERFACE       OPTIONS
+
+{%- for zone, zone_data in salt['pillar.get']('shorewall:zones', {}).iteritems() %}
+{#    skip if ip version does not match #}
+{%-   if zone_data.ipv is defined and zone_data.ipv != ipv %}{% continue %}{%endif %}
+{%-   for interface, interface_data in zone_data.get('interfaces', {}).iteritems() %}
+{#      skip if ip version does not match #}
+{%-     if interface_data.ipv is defined and interface_data_data.ipv != ipv %}{% continue %}{%endif %}
+
+# {{ interface }}
+# {{ interface_data.comment if interface_data.comment is defined else '' }}
+{{ zone }}  {{ interface }}  {{ interface_data.get('options', '') }}
+{%-   endfor %}
+{%- endfor %}

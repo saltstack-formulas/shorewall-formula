@@ -1,0 +1,12 @@
+# !!! FILE MANAGED BY SALT !!!
+
+#INTERFACE  MARK  RATE    CEIL      PRIORITY    OPTIONS
+
+{%- for rule in salt['pillar.get']('shorewall:tcclasses', {}) %}
+{#- skip if ip version does not match #}
+{%-   if rule.ipv is defined and rule.ipv != ipv %}{% continue %}{% endif %}
+
+{{ rule.get('interface') }}     {{ rule.get('mark') }}     {{ rule.get('rate') }}     {{ rule.get('ceil', 'full') }}      {{ rule.get('priority') }}     {{ rule.get('options', '') }}
+
+{%- endfor %}
+

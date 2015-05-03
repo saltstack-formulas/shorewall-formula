@@ -1,0 +1,32 @@
+# !!! FILE MANAGED BY SALT !!!
+#
+# Shorewall version 4.0 - Sample Rules File for one-interface configuration.
+# Copyright (C) 2006 by the Shorewall Team
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# See the file README.txt for further details.
+#------------------------------------------------------------------------------------------------------------
+# For information on entries in this file, type "man shorewall-rules"
+######################################################################################################################################################################################
+#ACTION         SOURCE          DEST            PROTO   DEST    SOURCE          ORIGINAL        RATE            USER/   MARK    CONNLIMIT       TIME         HEADERS         SWITCH
+#                                                       PORT    PORT(S)         DEST            LIMIT           GROUP
+#SECTION ALL
+#SECTION ESTABLISHED
+#SECTION RELATED
+SECTION NEW
+
+{%- for rule in salt['pillar.get']('shorewall:rules', {}) %}
+{# skip if ip version does not match #}
+{%-   if rule.ipv is defined and rule.ipv != ipv %}{% continue %}{% endif %}
+
+{%-   if rule is string %}
+{{ rule }}
+{%-   else %}
+# {{ rule.get('comment', '') }}
+{{ rule.get('action') }}  {{ rule.get('source', 'none') }}  {{ rule.get('dest', 'none') }}  {{ rule.get('proto', '-') }}  {{ rule.get('destport', '-') }}  {{ rule.get('sourceport', '-') }}  {{ rule.get('originaldest', '-') }}  {{ rule.get('ratelimit', '-') }}  {{ rule.get('usergroup', '-') }}  {{ rule.get('mark', '-') }}  {{ rule.get('connlimit', '-') }}  {{ rule.get('time', '-') }}  {{ rule.get('headers', '-') }}  {{ rule.get('switch', '') }}
+{%- endif %}
+{%- endfor %}

@@ -1,0 +1,150 @@
+shorewall:
+  ipv: # omit means 4 only. This controls wether shorewall or shorewall and shorewall6 is installed.
+    - 4 # ipv4 support
+    - 6 # ipv6 support. Cant' be used without ipv4!
+  
+  macros:
+    - macro.SaltMaster
+
+  zones:
+    mgmt:
+      ipv: 4                        # This controls if this item is used for ipv4 and/or ipv6 shorewall. Omit for both.
+      type: ipv4
+      options:
+      in_options:
+      out_options:
+      comment:
+      interfaces:
+        eth0:
+          ipv: 4
+          broadcast: detect
+          options: tcpflags,logmartians,nosmurfs
+          comment:
+        
+  policy:
+    - source: $FW
+      dest: net
+      policy: ACCEPT
+      comment: Allow Firewall to connect to world
+    - source: net
+      dest: all
+      policy: DROP
+      loglevel: info
+    - source: all
+      dest: all
+      policy: REJECT
+      loglevel: info
+      burstlimit: 10/sec:40
+      connlimit: 40/255.255.255.0
+      comment: Reject all other connections
+
+  rules:
+    - action: SSH(ACCEPT)
+      source: all
+      dest: all
+      comment: Allow SSH connections
+      ipv: 4                          # Rule for ipv4
+    - action: Ping(ACCEPT)
+      source: all
+      dest: $FW
+      comment: Allow Pings
+      ipv: 6                          # Rule for ipv6
+    - action: SaltMaster(ACCEPT)
+      source: all
+      dest: $FW
+      comment: Allow connections to saltmaster
+      # No ipv is given here          # Rule for ipv4 and ipv6 
+
+  masq:
+    - interface: eth0
+      source:   '10.100.200.45/29'
+      address: '2.2.3.3'
+      ipv: 4
+
+  routestopped:
+    - interface: eth0
+      host: '25.6.7.8'
+      ipv: 4
+
+  params:
+    - key: "NET_BCAST"
+      value: "130.252.100.255"
+
+  tcinterfaces:
+    - name: ppp0
+      type: External
+      in_bandwidth: 50mbit
+      out_bandwidth: 10mbit
+
+  tcpri:
+    - band: 1
+      address: 1.1.1.1
+    - band: 2
+      interface: eth1
+    - band: 2
+      proto: udp
+      port: 1194
+    - band: 1
+      helper: sip
+
+  tcdevices:
+    - name: ppp0
+      out_bandwidth: 9500kbit
+
+  tcclasses:
+    - interface: ppp0
+      mark: 1
+      rate: 300kbit
+      ceil: full
+      priority: 1
+      options: "tos=0x68/0xfc,tos=0xb8/0xfc"
+    - interface: ppp0
+      mark: 2
+      rate: full/4
+      ceil: full
+      priority: 2
+      options: "tcp-ack,tos-minimize-delay"
+    - interface: ppp0
+      mark: 3
+      rate: full/4
+      ceil: full
+      priority: 3
+    - interface: ppp0
+      mark: 4
+      rate: full/4
+      ceil: full
+      priority: 4
+      options: "default"
+    - interface: ppp0
+      mark: 5
+      rate: full/8
+      ceil: full
+      priority: 5
+
+  tcrules:
+    - action: "3:T"
+      proto: udp
+    - action: "4:T"
+      proto: tcp
+    - action: "5:T"
+      source: 192.168.1.5
+      ipv: 4
+    - action: "5:T"
+      source: fd42:1:1:1::220
+      ipv: 6
+    - action: "2:T"
+      proto: icmp
+    - action: "1:T"
+      helper: sip
+    - action: "2:T"
+      proto: tcp
+      port: 22,7740
+ 
+  etcdefault:
+    startup: 1
+    wait_interface: False
+    options: ''
+    startoptions: ''
+    restartoptions: ''
+    initlog: '/dev/null'
+    safestop: 0

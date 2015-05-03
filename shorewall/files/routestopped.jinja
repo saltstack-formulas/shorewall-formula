@@ -1,0 +1,22 @@
+# !!! FILE MANAGED BY SALT !!!
+#
+# Shorewall version 4.0 - Sample Routestopped File for two-interface configuration.
+# Copyright (C) 2006 by the Shorewall Team
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# See the file README.txt for further details.
+#------------------------------------------------------------------------------
+# For information about entries in this file, type "man shorewall-routestopped"
+##############################################################################
+#INTERFACE	HOST(S)                  OPTIONS
+{%- for rtsp in salt['pillar.get']('shorewall:routestopped', {}) %}
+{# skip if ip version does not match #}
+{%-   if rtsp.ipv is defined and rtsp.ipv != ipv %}{% continue %}{%endif %}
+
+# {{ rtsp.get('comment', '') }}
+{{ rtsp.get('interface') }}  {{ rtsp.get('host', '-') }}  {{ rtsp.get('options', '-') }}  {{ rtsp.get('proto', '-') }}  {{ rtsp.get('destport', '-') }}  {{ rtsp.get('sourceport', '') }}
+{%- endfor %}

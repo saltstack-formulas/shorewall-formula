@@ -1,0 +1,25 @@
+# !!! FILE MANAGED BY SALT !!!
+#
+# Shorewall version 4.0 - Sample Zones File for one-interface configuration.
+# Copyright (C) 2006 by the Shorewall Team
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# See the file README.txt for further details.
+#-----------------------------------------------------------------------------
+# For information about entries in this file, type "man shorewall-zones"
+###############################################################################
+#ZONE   TYPE    OPTIONS                 IN                      OUT
+#                                       OPTIONS                 OPTIONS
+fw      firewall
+{%- for zone, zone_data in salt['pillar.get']('shorewall:zones', {}).iteritems() %}
+{# skip if ip version does not match #}
+{%-   if zone_data.ipv is defined and zone_data.ipv != ipv %}{% continue %}{%endif %}
+
+# {{ zone }}
+# {{ zone_data.comment if zone_data.comment is defined else ''}}
+{{ zone }}    {{ zone_data.get('type', 'ipv{0}'.format(ipv)) }}    {{ zone_data.get('options', '-') }}    {{ zone_data.get('in_options', '-') }}    {{ zone_data.get('out_options', '-') }}
+{%- endfor %}

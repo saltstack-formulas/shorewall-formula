@@ -1,0 +1,27 @@
+# !!! FILE MANAGED BY SALT !!!
+#
+# Shorewall version 4.0 - Sample Masq file for two-interface configuration.
+# Copyright (C) 2006 by the Shorewall Team
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# See the file README.txt for further details.
+#------------------------------------------------------------------------------
+# For information about entries in this file, type "man shorewall-masq"
+###############################################################################
+#INTERFACE              SOURCE          ADDRESS         PROTO   PORT(S) IPSEC   MARK
+
+{%- for masq in salt['pillar.get']('shorewall:masq', {}) %}
+{# skip if ip version does not match #}
+{%-   if masq.ipv is defined and masq.ipv != ipv %}{% continue %}{%endif %}
+
+{%- if masq is string %}
+{{ masq }}
+{%- else %}
+# {{ masq.get('comment', '') }}
+{{ masq.get('interface') }}  {{ masq.get('source', '-') }}  {{ masq.get('address', '-') }}  {{ masq.get('proto', '-') }}  {{ masq.get('ports', '-') }}  {{ masq.get('ipsec', '-') }}  {{ masq.get('mark', '-') }}
+{%- endif %}
+{%- endfor %}

@@ -1,0 +1,21 @@
+{% set map = salt['grains.filter_by']({
+  'Debian': {
+    'pkg_v4': 'shorewall',
+    'pkg_v6': 'shorewall6',
+    'upnp_pkg': 'linux-igd',
+    'config_path_v4': '/etc/shorewall',
+    'config_path_v6': '/etc/shorewall6',
+    'service_v4': 'shorewall',
+    'service_v6': 'shorewall6',
+    'macro_path': '/usr/share/shorewall',
+    'config_files': ['zones', 'interfaces', 'policy', 'rules', 'masq', 'routestopped', 'params', 'tcinterfaces', 'tcpri', 'tcdevices', 'tcclasses', 'tcrules'],
+    'etcdefault_file': '/etc/default/shorewall',
+  },
+  'RedHat': {
+    'pkg': 'shorewall',
+  },
+  'Arch': {
+    'pkg': 'shorewall',
+  },
+}, merge=salt['pillar.get']('shorewall:lookup')) %}
+

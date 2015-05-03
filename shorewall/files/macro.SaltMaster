@@ -1,0 +1,11 @@
+#
+# Shorewall version 4 - SaltMaster Macro
+#
+# /usr/share/shorewall/macro.SaltMaster
+#
+###############################################################################
+#ACTION SOURCE  DEST    PROTO   DEST    SOURCE  RATE    USER/
+#               PORT(S) PORT(S) LIMIT   GROUP
+PARAM   -   -   tcp     4505
+PARAM   -   -   tcp     4506
+
