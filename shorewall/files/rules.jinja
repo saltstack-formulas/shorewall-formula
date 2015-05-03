@@ -27,6 +27,6 @@ SECTION NEW
 {{ rule }}
 {%-   else %}
 # {{ rule.get('comment', '') }}
-{{ rule.get('action') }}  {{ rule.get('source') }}  {{ rule.get('dest') }}  {{ rule.get('proto', '-') }}  {{ rule.get('destport', '-') }}  {{ rule.get('sourceport', '-') }}  {{ rule.get('originaldest', '-') }}  {{ rule.get('ratelimit', '-') }}  {{ rule.get('usergroup', '-') }}  {{ rule.get('mark', '-') }}  {{ rule.get('connlimit', '-') }}  {{ rule.get('time', '-') }}  {{ rule.get('headers', '-') }}  {{ rule.get('switch', '') }}
-{%-   endif %}
+{{ rule.get('action') }}  {{ rule.get('source', 'none') }}  {{ rule.get('dest', 'none') }}  {{ rule.get('proto', '-') }}  {{ rule.get('destport', '-') }}  {{ rule.get('sourceport', '-') }}  {{ rule.get('originaldest', '-') }}  {{ rule.get('ratelimit', '-') }}  {{ rule.get('usergroup', '-') }}  {{ rule.get('mark', '-') }}  {{ rule.get('connlimit', '-') }}  {{ rule.get('time', '-') }}  {{ rule.get('headers', '-') }}  {{ rule.get('switch', '') }}
+{%- endif %}
 {%- endfor %}

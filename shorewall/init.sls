@@ -47,16 +47,6 @@ shorewall_v{{ v }}_config_{{ config }}:
 {%-   endfor %}
 {%- endfor %}
 
-{# Install macro files #}
-shorewall_config_macro:
-  file.managed:
-    - name: "{{ map.macro_path }}/macro.SaltMaster"
-    - source: salt://shorewall/files/macro.SaltMaster
-    - require:
-      - pkg: shorewall_v6
-    - watch_in:
-      - service: shorewall_v6
-
 {#- check if we should enable simple traffic shaping #}
 {%- if salt['pillar.get']('shorewall:tcinterfaces', False) %}
 
@@ -98,3 +88,18 @@ shorewall_enable_tc_simple_v6:
       - service: shorewall_v6
 
 {%- endif %}
+
+{# Install macro files #}
+{% for macro in salt['pillar.get']('shorewall:macros', {}) %}
+shorewall_config_macro_{{ loop.index }}:
+  file.managed:
+    - name: {{ map.macro_path }}/macro
+    - source: salt://shorewall/files/{{ macro }}
+    - user: root
+    - group: root
+    - mode: 0644
+    - require:
+      - pkg: shorewall_v4
+    - watch_in:
+      - service: shorewall_v4
+{% endfor %}
