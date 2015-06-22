@@ -1,4 +1,7 @@
 {% set map = salt['grains.filter_by']({
+  'default': {
+    'shore_version': salt['pkg.version']('shorewall')
+  },
   'Debian': {
     'pkg_v4': 'shorewall',
     'pkg_v6': 'shorewall6',
