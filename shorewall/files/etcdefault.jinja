@@ -3,7 +3,7 @@
 {%- set options = salt['pillar.get']('shorewall:etcdefault:options', '') %}
 {%- set startoptions = salt['pillar.get']('shorewall:etcdefault:startoptions', '') %}
 {%- set restartoptions = salt['pillar.get']('shorewall:etcdefault:restartoptions', '') %}
-{%- set initlog = salt['pillar.get']('shorewall:etcdefault:startup', '/dev/null') %}
+{%- set initlog = salt['pillar.get']('shorewall:etcdefault:initlog', '/dev/null') %}
 {%- set safestop = salt['pillar.get']('shorewall:etcdefault:safestop', 0) %}
 
 # prevent startup with default configuration
