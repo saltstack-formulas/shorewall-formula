@@ -15,7 +15,7 @@
 ######################################################################################################################################################################################################
 #ACTION         SOURCE          DEST            PROTO   DEST    SOURCE          ORIGINAL        RATE            USER/   MARK    CONNLIMIT       TIME            HEADERS         SWITCH          HELPER
 #                                                       PORT    PORT(S)         DEST            LIMIT           GROUP
-{%- if (salt['pkg.version']('shorewall')|string())[0:3]|float() >= 4.6 %}
+{%- if (salt['pkg.version'](pkg)|string())[0:3]|float() >= 4.6 %}
 ?SECTION ALL
 ?SECTION ESTABLISHED
 ?SECTION RELATED
