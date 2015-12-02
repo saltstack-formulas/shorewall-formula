@@ -10,6 +10,7 @@
 {%- set name = 'shorewall_v{0}'.format(v) %}
 {%- set config_path = map['config_path_v{0}'.format(v)] %}
 {%- set service = map['service_v{0}'.format(v)] %}
+{%- set pkg_version = (salt['pkg.version'](pkg)|string())[0:3] %}
 
 {# Install required packages #}
 shorewall_v{{ v }}:
@@ -42,7 +43,8 @@ shorewall_v{{ v }}_config_{{ config }}:
     - watch_in:
       - service: {{ name }}
     - context:
-      ipv: {{ v }}
+        ipv: {{ v }}
+        pkg_version: {{ pkg_version }}
 
 {%-   endfor %}
 {%- endfor %}
