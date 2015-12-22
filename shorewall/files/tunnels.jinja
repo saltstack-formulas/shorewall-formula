@@ -1,0 +1,22 @@
+#
+# Shorewall version 4 - Tunnels File
+#
+# For information about entries in this file, type "man shorewall-tunnels"
+#
+# The manpage is also online at
+# http://www.shorewall.net/manpages/shorewall-tunnels.html
+#
+###############################################################################
+#TYPE			ZONE	GATEWAY(S)			GATEWAY
+#
+{%- for tunnels in salt['pillar.get']('shorewall:tunnels', {}) %}
+{# skip if ip version does not match #}
+{%-   if tunnels.ipv is defined and tunnels.ipv != ipv %}{% continue %}{%endif %}
+
+{%- if tunnels is string %}
+{{ tunnels }}
+{%- else %}
+# {{ tunnels.get('comment', '') }}
+{{ tunnels.get('type') }}  {{ tunnels.get('zone', '-') }}  {{ tunnels.get('gateway', '-') }}  {{ tunnels.get('gw_zones', '-') }}
+{%- endif %}
+{%- endfor %}
