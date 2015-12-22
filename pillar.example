@@ -140,6 +140,13 @@ shorewall:
       proto: tcp
       port: 22,7740
  
+  tcrules:
+    - type: ipsec:ah
+      zone: net
+      gateway: $IPSEC_GW
+      gw_zones: 'vpn1,vpn2,vpn3'
+      comment: Racoon to remote IPsec Gateway
+
   etcdefault:
     startup: 1
     wait_interface: False
