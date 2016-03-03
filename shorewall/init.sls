@@ -37,7 +37,7 @@ shorewall_v{{ v }}_config_{{ config }}:
     - template: jinja
     - user: root
     - group: root
-    - mode: 0644
+    - mode: '0644'
     - require:
       - pkg: {{ name }}
     - watch_in:
@@ -99,7 +99,7 @@ shorewall_config_macro_{{ loop.index }}:
     - source: salt://shorewall/files/{{ macro }}
     - user: root
     - group: root
-    - mode: 0644
+    - mode: '0644'
     - require:
       - pkg: shorewall_v4
     - watch_in:
