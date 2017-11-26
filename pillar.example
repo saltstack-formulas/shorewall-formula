@@ -6,6 +6,12 @@ shorewall:
   macros:
     - macro.SaltMaster
 
+  macros_pillar:
+    macro.SaltMaster:    # You can enter as many rules as you want with the same syntax for the file rules.
+      - action: PARAM
+        proto: tcp
+        destport: 4505,4506
+
   zones:
     mgmt:
       ipv: 4                        # This controls if this item is used for ipv4 and/or ipv6 shorewall. Omit for both.
