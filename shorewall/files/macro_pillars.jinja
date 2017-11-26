@@ -1,0 +1,19 @@
+#
+# Shorewall version 4 - {{ macro }}
+#
+# /usr/share/shorewall/{{ macro }}
+#
+#
+###############################################################################
+#ACTION SOURCE  DEST    PROTO   DEST    SOURCE  RATE    USER/
+#               PORT(S) PORT(S) LIMIT   GROUP
+{%- set path = ['shorewall', 'macros_pillar', macro]|join(':') %}
+{%- for rule in salt['pillar.get'](path, {}) %}
+{%-   if rule is string %}
+{{ rule }}
+{%-   else %}
+# {{ rule.get('comment', '') }}
+{{ rule.get('action') }}  {{ rule.get('source', '-') }}  {{ rule.get('dest', '-') }}  {{ rule.get('proto', '-') }}  {{ rule.get('destport', '-') }}  {{ rule.get('sourceport', '-') }}  {{ rule.get('originaldest', '-') }}  {{ rule.get('ratelimit', '-') }}  {{ rule.get('usergroup', '-') }}  {{ rule.get('mark', '-') }}  {{ rule.get('connlimit', '-') }}  {{ rule.get('time', '-') }}  {{ rule.get('headers', '-') }}  {{ rule.get('switch', '') }}
+{%-   endif %} 
+{%- endfor %}
+#LAST LINE -- ADD YOUR ENTRIES BEFORE THIS ONE -- DO NOT REMOVE
