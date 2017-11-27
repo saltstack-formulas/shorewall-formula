@@ -31,7 +31,25 @@
 {%-   if params.ipv is defined and params.ipv != ipv %}{% continue %}{%endif %}
 
 # {{ params.get('comment', '') }}
+{%- if params.get('value') %}
 {{ params.get('key') }}={{ params.get('value') }}
+
+{%- elif params.get('mine') -%}
+
+{%- set mine_target = params.get('mine').get('target') -%}
+{%- set mine_function = params.get('mine').get('function') -%}
+{%- set mine_expr_form = params.get('mine').get('expr_form') -%}
+{%- set default = params.get('default') -%}
+
+{%- set mine_result = salt['mine.get'](mine_target, mine_function, mine_expr_form).values() %}
+{{ params.get('key') }}=
+{%- for result in mine_result -%}
+{{ result[0] }}{%- if not loop.last -%}{{','}}{%- endif -%}
+{%- else -%}
+{{ default }}
+{%- endfor -%}
+{%- endif -%}
+
 {%- endfor %}
 
 #LAST LINE -- DO NOT REMOVE
