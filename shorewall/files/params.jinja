@@ -26,6 +26,25 @@
 #
 ###############################################################################
 
+{# Renders a list (or list of lists) of IP addresses as Shorewall param format #}
+{%- macro render_list(list) -%}
+{%- set ip_list = [] -%}
+  {%- if list is not iterable -%}
+    {%- do ip_list.append(list) -%}
+  {%- else -%}
+    {%- for item in list -%}
+      {%- if item is not iterable -%}
+        {%- do ip_list.append(item) -%}
+      {%- else -%}
+        {%- for i in item -%}
+          {%- do ip_list.append(i) -%}
+        {%- endfor -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{{ ip_list|join(',') }}
+{%- endmacro -%}
+
 {%- for params in salt['pillar.get']('shorewall:params', {}) %}
 {# skip if ip version does not match #}
 {%-   if params.ipv is defined and params.ipv != ipv %}{% continue %}{%endif %}
@@ -42,14 +61,16 @@
 {%- set default = params.get('default') -%}
 
 {%- set mine_result = salt['mine.get'](mine_target, mine_function, mine_expr_form).values() %}
-{{ params.get('key') }}=
-{%- for result in mine_result -%}
-{{ result[0] }}{%- if not loop.last -%}{{','}}{%- endif -%}
+
+{{ params.get('key') }}=
+{%- if mine_result -%}
+{{ render_list(mine_result) }}
 {%- else -%}
 {{ default }}
-{%- endfor -%}
+{%- endif -%}
 {%- endif -%}
 
 {%- endfor %}
 
 #LAST LINE -- DO NOT REMOVE
+
