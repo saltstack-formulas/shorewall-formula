@@ -105,3 +105,18 @@ shorewall_config_macro_{{ loop.index }}:
     - watch_in:
       - service: shorewall_v4
 {% endfor %}
+
+{# Replace key=value in shorewall.conf #}
+{%- if salt['pillar.get']('shorewall:config', False) %}
+{% for config in salt['pillar.get']('shorewall:config', {}) %}
+
+shorewall_config_custom_v4{{ loop.index }}:
+  file.replace:
+    - name: {{ map.config_path_v4 }}/shorewall.conf
+    - pattern: "{{ config.get('key') }}=.*"
+    - repl: "{{ config.get('key') }}={{ config.get('value') }}"
+    - watch_in:
+      - service: shorewall_v4
+
+{%- endfor %}
+{%- endif %}

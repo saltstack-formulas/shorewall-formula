@@ -2,6 +2,10 @@ shorewall:
   ipv: # omit means 4 only. This controls wether shorewall or shorewall and shorewall6 is installed.
     - 4 # ipv4 support
     - 6 # ipv6 support. Cant' be used without ipv4!
+
+  config: # only work for ipv4
+    - key: "DOCKER"
+      value: "Yes"
   
   macros:
     - macro.SaltMaster
