@@ -18,3 +18,12 @@ You can take a loot at [`pillar.example`](/pillar.example) to configure Shorewal
 
 * NAT is not possible with IPv6, see http://shorewall.net/IPv6Support.html
 * For traffic shaping either use simple (tcinterfaces and tcpri) or complex (tcdevices, tcclasses and tcrules)
+
+## Run tests
+
+This formula is tested with [Kitchen](https://kitchen.ci/) and [Inspec](https://www.inspec.io/) in a Docker container.
+
+To run tests you need to
+
+* install Ruby dependencies : `bundle install`
+* run Kitchen : `kitchen test`
