@@ -3,7 +3,7 @@
 {%- set ipv = salt['pillar.get']('shorewall:ipv', [4]) %}
 {%- do ipv.append(4) if not 4 in ipv %}
 
-{# Iterate over all given ip versions in pillar #}
+# Iterate over all given ip versions in pillar
 {%- for v in ipv %}
 
 {%- set pkg = map['pkg_v{0}'.format(v)] %}
@@ -17,7 +17,7 @@
 {%-   set pkg_version = (salt['pkg.latest_version'](pkg)|string())[0:3] %}
 {%- endif %}
 
-{# Install required packages #}
+# Install required packages
 shorewall_v{{ v }}:
   pkg:
     - installed
@@ -26,11 +26,11 @@ shorewall_v{{ v }}:
     - name: {{ service }}
     - enable: True
 
-{# Create config files #}
+# Create config files
 {%-    for config in map.config_files %}
-{# NAT is not possible for IPv6, see http://shorewall.net/IPv6Support.html #}
+# NAT is not possible for IPv6, see http://shorewall.net/IPv6Support.html
 {%-      if config == 'masq' and v == 6 %}{% continue %}{% endif %}
-{# Interfaces for traffic shaping should be declared only once, see http://shorewall.net/simple_traffic_shaping.html #}
+# Interfaces for traffic shaping should be declared only once, see http://shorewall.net/simple_traffic_shaping.html
 {%-      if config == 'tcinterfaces' and v == 6 %}{% continue %}{% endif %}
 {%-      if config == 'tcdevices' and v == 6 %}{% continue %}{% endif %}
 {%-      if config == 'tcclasses' and v == 6 %}{% continue %}{% endif %}
@@ -54,7 +54,7 @@ shorewall_v{{ v }}_config_{{ config }}:
 {%-   endfor %}
 {%- endfor %}
 
-{#- check if we should enable simple traffic shaping #}
+# check if we should enable simple traffic shaping
 {%- if salt['pillar.get']('shorewall:tcinterfaces', False) %}
 
 shorewall_enable_tc_simple_v4:
@@ -75,7 +75,7 @@ shorewall_enable_tc_simple_v6:
 
 {%- endif %}
 
-{#- check if we should enable complex traffic shaping #}
+# check if we should enable complex traffic shaping
 {%- if salt['pillar.get']('shorewall:tcdevices', False) %}
 
 shorewall_enable_tc_simple_v4:
@@ -96,7 +96,7 @@ shorewall_enable_tc_simple_v6:
 
 {%- endif %}
 
-{# Install macro files #}
+# Install macro files
 {% for macro in salt['pillar.get']('shorewall:macros', {}) %}
 shorewall_config_macro_{{ loop.index }}:
   file.managed:
