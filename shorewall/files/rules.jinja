@@ -20,7 +20,7 @@
   {% set section = 'SECTION' %}
 {%- endif %}
 
-{%- for name in ['ALL', 'ESTABLISHED', 'RELATED', 'NEW'] %}
+{%- for name in ['ALL', 'ESTABLISHED', 'RELATED', 'INVALID', 'UNTRACKED', 'NEW'] %}
 ### START OF SECTION {{ name }}
 {{ section }} {{ name }}
 {%- for rule in salt['pillar.get']('shorewall:rules:' + name, []) %}
