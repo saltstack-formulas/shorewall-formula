@@ -42,22 +42,29 @@ provisioner:
                 ipv: 4
                 broadcast: detect
                 options: dhcp,tcpflags,logmartians,nosmurfs
+
         policy:
           - source: $FW
             dest: net
             policy: ACCEPT
+            comment: Allow Firewall to connect to World
+
           - source: net
             dest: $FW
             policy: ACCEPT
+            comment: Allow World to connect to Firewall
+
         rules:
           ALL:
             - action: ACCEPT
               source: net
               dest: $FW
+              comment: Allow World to connect to Firewall
 
             - action: ACCEPT
               source: $FW
               dest: net
+              comment: Allow Firewall to connect to World
 
 platforms:
   - name: <%= distrib %>-<%= codename %>
