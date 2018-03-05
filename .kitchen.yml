@@ -71,9 +71,13 @@ platforms:
     driver_config:
       image: "<%= distrib %>:<%= codename %>"
       platform: <%= distrib %>
-      run_command: /lib/systemd/systemd
       provision_command:
         - apt-get update && apt-get install -y locales && locale-gen en_US.UTF-8
+      <% if codename == 'wheezy' %>
+      run_command: /sbin/init
+      <% else %>
+      run_command: /lib/systemd/systemd
+      <% end %>
 
 verifier:
   name: inspec
