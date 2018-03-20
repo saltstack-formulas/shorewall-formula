@@ -16,11 +16,13 @@
 #                                                       PORT    PORT(S)         DEST            LIMIT           GROUP
 {%- if pkg_version|float() >= 4.6 %}
   {% set section = '?SECTION' %}
+  {% set sections = ['ALL', 'ESTABLISHED', 'RELATED', 'INVALID', 'UNTRACKED', 'NEW'] %}
 {%- else %}
   {% set section = 'SECTION' %}
+  {% set sections = ['ALL', 'ESTABLISHED', 'RELATED', 'NEW'] %}
 {%- endif %}
 
-{%- for name in ['ALL', 'ESTABLISHED', 'RELATED', 'INVALID', 'UNTRACKED', 'NEW'] %}
+{%- for name in sections %}
 ### START OF SECTION {{ name }}
 {{ section }} {{ name }}
 {%- for rule in salt['pillar.get']('shorewall:rules:' + name, []) %}
