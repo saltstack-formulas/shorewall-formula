@@ -1,5 +1,7 @@
 # Shorewall Salt Formula
 
+[![Build Status](https://travis-ci.org/saltstack-formulas/shorewall-formula.svg?branch=master)](https://travis-ci.org/saltstack-formulas/shorewall-formula)
+
 Install and configure [shorewall](http://shorewall.org/) directly with SaltStack.
 
 ## Available states
