@@ -76,8 +76,18 @@ shorewall:
       ipv: 4
 
   params:
+    # you can specify a value
     - key: "NET_BCAST"
       value: "130.252.100.255"
+    # or a mine query to be executed
+    - key: "AUTHORIZED_SERVERS"
+      comment: Dynamic list of authorized servers
+      mine:
+        target: I@UseServer
+        function: main_ipaddr
+        expr_form: compound
+      # mine query needs a default value if no results
+      default: 127.0.0.1
 
   tcinterfaces:
     - name: ppp0
