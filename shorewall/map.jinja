@@ -1,22 +1,7 @@
-{% set map = salt['grains.filter_by']({
-  'Debian': {
-    'pkg_v4': 'shorewall',
-    'pkg_v6': 'shorewall6',
-    'upnp_pkg': 'linux-igd',
-    'config_path_v4': '/etc/shorewall',
-    'config_path_v6': '/etc/shorewall6',
-    'service_v4': 'shorewall',
-    'service_v6': 'shorewall6',
-    'macro_path': '/etc/shorewall',
-    'config_files': ['zones', 'interfaces', 'policy', 'rules', 'masq', 'routestopped', 'params', 'tcinterfaces', 'tcpri', 'tcdevices', 'tcclasses', 'tcrules', 'tunnels'],
-    'etcdefault_file': '/etc/default/shorewall',
-    'etcdefault6_file': '/etc/default/shorewall6',
-  },
-  'RedHat': {
-    'pkg': 'shorewall',
-  },
-  'Arch': {
-    'pkg': 'shorewall',
-  },
-}, merge=salt['pillar.get']('shorewall:lookup')) %}
+# -*- coding: utf-8 -*-
+# vim: ft=jinja
 
+{% import_yaml "shorewall/os_family_map.yml" as os_family_map %}
+
+{# get the settings for the os_family grain #}
+{% set map = salt['grains.filter_by'](os_family_map, merge=salt['pillar.get']('shorewall:lookup')) %}

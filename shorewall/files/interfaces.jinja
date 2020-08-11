@@ -1,6 +1,6 @@
 # !!! FILE MANAGED BY SALT !!!
 #
-# Shorewall version 4.0 - Sample Interfaces File for one-interface configuration.
+# Shorewall version {{ pkg_version }} - Sample Interfaces File for one-interface configuration.
 # Copyright (C) 2006 by the Shorewall Team
 #
 # This library is free software; you can redistribute it and/or
@@ -12,7 +12,12 @@
 #------------------------------------------------------------------------------
 # For information about entries in this file, type "man shorewall-interfaces"
 ###############################################################################
-?FORMAT 2
+{%- if pkg_version|float() >= 4.6 %}
+  {% set format = '?FORMAT' %}
+{%- else %}
+  {% set format = 'FORMAT' %}
+{%- endif %}
+{{ format }} 2
 ###############################################################################
 #ZONE   INTERFACE       OPTIONS
 

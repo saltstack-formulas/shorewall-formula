@@ -1,5 +1,6 @@
+# !!! FILE MANAGED BY SALT !!!
 #
-# Shorewall version 4 - Params File
+# Shorewall version {{ pkg_version }} - Params File
 #
 # /etc/shorewall/params
 #
@@ -25,12 +26,51 @@
 #
 ###############################################################################
 
+{# Renders a list (or list of lists) of IP addresses as Shorewall param format #}
+{%- macro render_list(list) -%}
+{%- set ip_list = [] -%}
+  {%- if list is not iterable -%}
+    {%- do ip_list.append(list) -%}
+  {%- else -%}
+    {%- for item in list -%}
+      {%- if item is not iterable -%}
+        {%- do ip_list.append(item) -%}
+      {%- else -%}
+        {%- for i in item -%}
+          {%- do ip_list.append(i) -%}
+        {%- endfor -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{{ ip_list|join(',') }}
+{%- endmacro -%}
+
 {%- for params in salt['pillar.get']('shorewall:params', {}) %}
 {# skip if ip version does not match #}
 {%-   if params.ipv is defined and params.ipv != ipv %}{% continue %}{%endif %}
 
 # {{ params.get('comment', '') }}
+{%- if params.get('value') %}
 {{ params.get('key') }}={{ params.get('value') }}
+
+{%- elif params.get('mine') -%}
+
+{%- set mine_target = params.get('mine').get('target') -%}
+{%- set mine_function = params.get('mine').get('function') -%}
+{%- set mine_expr_form = params.get('mine').get('expr_form') -%}
+{%- set default = params.get('default') -%}
+
+{%- set mine_result = salt['mine.get'](mine_target, mine_function, mine_expr_form).values() %}
+
+{{ params.get('key') }}=
+{%- if mine_result -%}
+{{ render_list(mine_result) }}
+{%- else -%}
+{{ default }}
+{%- endif -%}
+{%- endif -%}
+
 {%- endfor %}
 
 #LAST LINE -- DO NOT REMOVE
+

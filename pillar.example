@@ -1,8 +1,17 @@
 shorewall:
+  etcdefault:
+    startup: 1
+    wait_interface: False
+    options: ''
+    startoptions: ''
+    restartoptions: ''
+    initlog: '/dev/null'
+    safestop: 0
+
   ipv: # omit means 4 only. This controls wether shorewall or shorewall and shorewall6 is installed.
     - 4 # ipv4 support
     - 6 # ipv6 support. Cant' be used without ipv4!
-  
+
   macros:
     - macro.SaltMaster
 
@@ -20,7 +29,7 @@ shorewall:
           broadcast: detect
           options: tcpflags,logmartians,nosmurfs
           comment:
-        
+
   policy:
     - source: $FW
       dest: net
@@ -53,7 +62,7 @@ shorewall:
       source: all
       dest: $FW
       comment: Allow connections to saltmaster
-      # No ipv is given here          # Rule for ipv4 and ipv6 
+      # No ipv is given here          # Rule for ipv4 and ipv6
 
   masq:
     - interface: eth0
@@ -67,8 +76,18 @@ shorewall:
       ipv: 4
 
   params:
+    # you can specify a value
     - key: "NET_BCAST"
       value: "130.252.100.255"
+    # or a mine query to be executed
+    - key: "AUTHORIZED_SERVERS"
+      comment: Dynamic list of authorized servers
+      mine:
+        target: I@UseServer
+        function: main_ipaddr
+        expr_form: compound
+      # mine query needs a default value if no results
+      default: 127.0.0.1
 
   tcinterfaces:
     - name: ppp0
@@ -139,19 +158,10 @@ shorewall:
     - action: "2:T"
       proto: tcp
       port: 22,7740
- 
+
   tcrules:
     - type: ipsec:ah
       zone: net
       gateway: $IPSEC_GW
       gw_zones: 'vpn1,vpn2,vpn3'
       comment: Racoon to remote IPsec Gateway
-
-  etcdefault:
-    startup: 1
-    wait_interface: False
-    options: ''
-    startoptions: ''
-    restartoptions: ''
-    initlog: '/dev/null'
-    safestop: 0
