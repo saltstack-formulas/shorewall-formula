@@ -21,10 +21,10 @@
 ###############################################################################
 #ZONE   INTERFACE       OPTIONS
 
-{%- for zone, zone_data in salt['pillar.get']('shorewall:zones', {}).items() %}
+{%- for zone, zone_data in salt['pillar.get']('shorewall:zones', {})|dictsort %}
 {#    skip if ip version does not match #}
 {%-   if zone_data.ipv is defined and zone_data.ipv != ipv %}{% continue %}{%endif %}
-{%-   for interface, interface_data in zone_data.get('interfaces', {}).items() %}
+{%-   for interface, interface_data in zone_data.get('interfaces', {})|dictsort %}
 {#      skip if ip version does not match #}
 {%-     if interface_data.ipv is defined and interface_data.ipv != ipv %}{% continue %}{%endif %}
 
