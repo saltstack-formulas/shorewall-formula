@@ -68,11 +68,15 @@ shorewall:
     - interface: eth0
       source:   '10.100.200.45/29'
       address: '2.2.3.3'
-      ipv: 4
 
-  routestopped:
-    - interface: eth0
-      host: '25.6.7.8'
+  snat:
+    - action: MASQUERADE
+      source: eth0
+      address: 2.2.3.3
+
+  stoppedrules:
+    - action: ACCEPT
+      dest: eth0
       ipv: 4
 
   params:
@@ -159,7 +163,26 @@ shorewall:
       proto: tcp
       port: 22,7740
 
-  tcrules:
+  mangle:
+    - action: "3:T"
+      proto: udp
+    - action: "4:T"
+      proto: tcp
+    - action: "5:T"
+      source: 192.168.1.5
+      ipv: 4
+    - action: "5:T"
+      source: fd42:1:1:1::220
+      ipv: 6
+    - action: "2:T"
+      proto: icmp
+    - action: "1:T"
+      helper: sip
+    - action: "2:T"
+      proto: tcp
+      port: 22,7740
+
+  tunnels:
     - type: ipsec:ah
       zone: net
       gateway: $IPSEC_GW

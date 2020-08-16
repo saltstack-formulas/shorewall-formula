@@ -30,10 +30,17 @@ shorewall_v{{ v }}:
 {%-    for config in map.config_files %}
 # NAT is not possible for IPv6, see http://shorewall.net/IPv6Support.html
 {%-      if config == 'masq' and v == 6 %}{% continue %}{% endif %}
+{%-      if config == 'snat' and v == 6 %}{% continue %}{% endif %}
 # Interfaces for traffic shaping should be declared only once, see http://shorewall.net/simple_traffic_shaping.html
 {%-      if config == 'tcinterfaces' and v == 6 %}{% continue %}{% endif %}
 {%-      if config == 'tcdevices' and v == 6 %}{% continue %}{% endif %}
 {%-      if config == 'tcclasses' and v == 6 %}{% continue %}{% endif %}
+# SNAT replaced MASQ in 5.0.14, afaict it's not possible to test for the .14 so just go with 5.0
+{%-      if config == 'masq' and pkg_version|float() >=5.0 %}{% continue %}{% endif %}
+# These were introduced in 4.6
+{%-      if config == 'mangle' and pkg_version|float() < 4.6 %}{% continue %}{% endif %}
+{%-      if config == 'stoppedrules' and pkg_version|float() < 4.6 %}{% continue %}{% endif %}
+
 
 shorewall_v{{ v }}_config_{{ config }}:
   file.managed:

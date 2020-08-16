@@ -1,0 +1,21 @@
+# !!! FILE MANAGED BY SALT !!!
+#
+# Shorewall version {{ pkg_version }} -- SNAT/Masquerade File
+#
+# For information about entries in this file, type "man shorewall-snat"
+#
+# See http://shorewall.net/manpages/shorewall-snat.html for additional information
+###############################################################################
+#ACTION         SOURCE          DEST            PROTO   PORT   IPSEC  MARK   USER    SWITCH  ORIGDEST   PROBABILITY
+
+{%- for snat in salt['pillar.get']('shorewall:snat', {}) %}
+{# skip if ip version does not match #}
+{%-   if snat.ipv is defined and snat.ipv != ipv %}{% continue %}{%endif %}
+
+{%- if snat is string %}
+{{ snat }}
+{%- else %}
+# {{ snat.get('comment', '') }}
+{{ snat.get('action') }}  {{ snat.get('source', '-') }}  {{ snat.get('dest', '-') }}  {{ snat.get('proto', '-') }}  {{ snat.get('ports', '-') }}  {{ snat.get('ipsec', '-') }}  {{ snat.get('mark', '-') }}  {{ snat.get('user', '-') }}  {{ snat.get('switch', '-') }}  {{ snat.get('origdest', '-') }}  {{ snat.get('probability', '-') }}
+{%- endif %}
+{%- endfor %}
