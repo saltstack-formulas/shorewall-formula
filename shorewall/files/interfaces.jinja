@@ -30,6 +30,10 @@
 
 # {{ interface }}
 # {{ interface_data.comment if interface_data.comment is defined else '' }}
+{%- if ipv == 6 %}
+{{ zone }}  {{ interface }}  {{ interface_data.get('options', '').replace('arp_filter', '').replace(',,', ',').replace('arp_ignore', '').replace(',,', ',').replace('logmartians', '').replace(',,', ',').replace('nosmurfs', '').replace(',,', ',').replace('proxyarp', '').replace(',,', ',').replace('routefilter', '').replace(',,', ',') }}
+{%- else %}
 {{ zone }}  {{ interface }}  {{ interface_data.get('options', '') }}
+{%- endif %}
 {%-   endfor %}
 {%- endfor %}
