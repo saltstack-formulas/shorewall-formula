@@ -40,6 +40,9 @@ shorewall_v{{ v }}:
 # These were introduced in 4.6
 {%-      if config == 'mangle' and pkg_version|float() < 4.6 %}{% continue %}{% endif %}
 {%-      if config == 'stoppedrules' and pkg_version|float() < 4.6 %}{% continue %}{% endif %}
+# These are no longer supported in 5.0
+{%-      if config == 'routestopped' and pkg_version|float() >= 5.0 %}{% continue %}{% endif %}
+{%-      if config == 'tcrules' and pkg_version|float() >= 5.0 %}{% continue %}{% endif %}
 
 
 shorewall_v{{ v }}_config_{{ config }}:
