@@ -21,6 +21,6 @@
 {{ stoppedrules }}
 {%- else %}
 # {{ stoppedrules.get('comment', '') }}
-{{ stoppedrules.get('action') }}  {{ stoppedrules.get('source', '-') }}  {{ stoppedrules.get('dest', '-') }}  {{ stoppedrules.get('proto') }}  {{ stoppedrules.get('destports') }}  {{ stoppedrules.get('sourceports') }}
+{{ stoppedrules.get('action') }}  {{ stoppedrules.get('source', '-') }}  {{ stoppedrules.get('dest', '-') }}  {{ stoppedrules.get('proto', '-') }}  {{ stoppedrules.get('destports', '-') }}  {{ stoppedrules.get('sourceports', '-') }}
 {%- endif %}
 {%- endfor %}
