@@ -1,0 +1,26 @@
+# !!! FILE MANAGED BY SALT !!!
+#
+# Shorewall version {{ pkg_version }} -- /etc/shorewall/stoppedrules
+#
+# For information about entries in this file, type "man shorewall-stoppedrules"
+#
+# The manpage is also online at
+# http://www.shorewall.net/manpages/shorewall-stoppedrules.html
+#
+# See http://shorewall.net/starting_and_stopping_shorewall.htm for additional
+# information.
+#
+###############################################################################
+#ACTION                SOURCE                  DEST            PROTO   DPORT   SPORT
+
+{%- for stoppedrules in salt['pillar.get']('shorewall:stoppedrules', {}) %}
+{# skip if ip version does not match #}
+{%-   if stoppedrules.ipv is defined and stoppedrules.ipv != ipv %}{% continue %}{%endif %}
+
+{%- if stoppedrules is string %}
+{{ stoppedrules }}
+{%- else %}
+# {{ stoppedrules.get('comment', '') }}
+{{ stoppedrules.get('action') }}  {{ stoppedrules.get('source', '-') }}  {{ stoppedrules.get('dest', '-') }}  {{ stoppedrules.get('proto', '-') }}  {{ stoppedrules.get('destports', '-') }}  {{ stoppedrules.get('sourceports', '-') }}
+{%- endif %}
+{%- endfor %}

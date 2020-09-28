@@ -16,13 +16,16 @@ Debian:
     - policy
     - rules
     - masq
+    - snat
     - routestopped
+    - stoppedrules
     - params
     - tcinterfaces
     - tcpri
     - tcdevices
     - tcclasses
     - tcrules
+    - mangle
     - tunnels
   etcdefault_file: /etc/default/shorewall
   etcdefault6_file: /etc/default/shorewall6

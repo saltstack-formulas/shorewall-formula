@@ -21,6 +21,16 @@
 ###############################################################################
 #ZONE   INTERFACE       OPTIONS
 
+{#- delete ipv4 options not supported in ipv6 -#}
+{%- macro delete_ipv4_options(options) -%}
+{%-   set ipv4_only_options = ['arp_filter', 'arp_ignore', 'logmartians', 'nosmurfs', 'proxyarp', 'routefilter'] -%}
+{%-   set ipv6_options = [] -%}
+{%-   for option in options.split(',') if option not in ipv4_only_options -%}
+{%-     do ipv6_options.append(option) -%}
+{%-   endfor -%}
+{{ ','.join(ipv6_options) }}
+{%- endmacro -%}
+
 {%- for zone, zone_data in salt['pillar.get']('shorewall:zones', {})|dictsort %}
 {#    skip if ip version does not match #}
 {%-   if zone_data.ipv is defined and zone_data.ipv != ipv %}{% continue %}{%endif %}
@@ -30,6 +40,10 @@
 
 # {{ interface }}
 # {{ interface_data.comment if interface_data.comment is defined else '' }}
+{%- if ipv == 4 %}
 {{ zone }}  {{ interface }}  {{ interface_data.get('options', '') }}
+{%- else %}
+{{ zone }}  {{ interface }}  {{ delete_ipv4_options(interface_data.get('options', '')) }}
+{%- endif %}
 {%-   endfor %}
 {%- endfor %}
